@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ホワイトデー・ストーリー ~あの日の答え~</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700&family=Zen+Old+Mincho&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: #0a0e1e;
+  overflow: hidden;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  user-select: none;
+}
+
+#game {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+/* === 背景 === */
+#bg {
+  position: absolute;
+  inset: 0;
+  transition: opacity 0.8s ease;
+}
+
+.bg-classroom-morning {
+  background: linear-gradient(180deg, #B4D7FF 0%, #D6EBFF 25%, #FFF8DC 30%, #FFFDE8 100%);
+}
+
+.bg-hallway-afternoon {
+  background: linear-gradient(180deg, #E8D5B7 0%, #F5E6D0 20%, #DEB887 40%, #D2B48C 100%);
+}
+
+.bg-rooftop-sunset {
+  background: linear-gradient(180deg, #FF7E5F 0%, #FEB47B 20%, #FFD4A2 40%, #FFF0D0 55%, #D0D0D0 55%, #B8B8B8 100%);
+}
+
+.bg-park-evening {
+  background: linear-gradient(180deg, #2C1654 0%, #4A2080 15%, #FF6B8A 35%, #FFB88C 50%, #4CAF50 65%, #2E7D32 100%);
+}
+
+.bg-cafe {
+  background: linear-gradient(180deg, #FFF3E0 0%, #FFE0B2 20%, #8D6E63 60%, #5D4037 80%, #3E2723 100%);
+}
+
+.bg-street-night {
+  background: linear-gradient(180deg, #0D1B2A 0%, #1B2838 20%, #2C3E50 40%, #34495E 60%, #2C3E50 80%, #1a1a2e 100%);
+}
+
+.bg-aquarium {
+  background: linear-gradient(180deg, #001833 0%, #003366 20%, #004C99 40%, #0066CC 60%, #004C99 80%, #001833 100%);
+}
+
+/* 背景装飾 */
+.bg-detail {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* 教室の窓 */
+.window-frame {
+  width: 120px; height: 150px;
+  border: 6px solid #8B7355;
+  background: rgba(180,215,255,0.3);
+  top: 5%;
+}
+.window-frame:nth-child(1) { left: 10%; }
+.window-frame:nth-child(2) { left: 35%; }
+.window-frame:nth-child(3) { left: 60%; }
+
+/* 屋上のフェンス */
+.fence {
+  width: 100%; height: 3px;
+  background: repeating-linear-gradient(90deg, #999 0px, #999 2px, transparent 2px, transparent 15px);
+  top: 53%;
+}
+
+/* 夜の星 */
+.star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: white;
+  border-radius: 50%;
+  animation: twinkle 2s ease-in-out infinite alternate;
+}
+@keyframes twinkle {
+  0% { opacity: 0.3; }
+  100% { opacity: 1; }
+}
+
+/* 水族館の泡 */
+.bubble {
+  position: absolute;
+  border: 1px solid rgba(255,255,255,0.3);
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent);
+  animation: bubbleRise linear infinite;
+}
+@keyframes bubbleRise {
+  0% { transform: translateY(0) translateX(0); opacity: 0; }
+  10% { opacity: 0.6; }
+  90% { opacity: 0.6; }
+  100% { transform: translateY(-100vh) translateX(30px); opacity: 0; }
+}
+
+/* 魚 */
+.fish {
+  position: absolute;
+  font-size: 28px;
+  animation: fishSwim linear infinite;
+  opacity: 0.7;
+}
+@keyframes fishSwim {
+  0% { transform: translateX(-50px) translateY(0); }
+  25% { transform: translateX(25vw) translateY(-15px); }
+  50% { transform: translateX(50vw) translateY(5px); }
+  75% { transform: translateX(75vw) translateY(-10px); }
+  100% { transform: translateX(105vw) translateY(0); }
+}
+
+/* カフェの光 */
+.cafe-light {
+  position: absolute;
+  width: 200px; height: 200px;
+  background: radial-gradient(circle, rgba(255,200,100,0.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+
+/* ===  パーティクル === */
+.heart-particle {
+  position: absolute;
+  color: #FF69B4;
+  font-size: 16px;
+  pointer-events: none;
+  animation: floatHeart 4s ease-in-out infinite;
+  opacity: 0.6;
+}
+
+@keyframes floatHeart {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  20% { opacity: 0.6; }
+  80% { opacity: 0.6; }
+  100% { transform: translateY(-200px) rotate(20deg); opacity: 0; }
+}
+
+.sakura-petal {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  background: #FFB7C5;
+  border-radius: 50% 0 50% 50%;
+  opacity: 0.7;
+  animation: sakuraFall linear infinite;
+}
+@keyframes sakuraFall {
+  0% { transform: translateY(-20px) rotate(0deg) translateX(0); opacity: 0; }
+  10% { opacity: 0.7; }
+  90% { opacity: 0.7; }
+  100% { transform: translateY(100vh) rotate(720deg) translateX(100px); opacity: 0; }
+}
+
+.sparkle {
+  position: absolute;
+  color: #FFD700;
+  font-size: 14px;
+  pointer-events: none;
+  animation: sparkleAnim 1.5s ease-out forwards;
+}
+@keyframes sparkleAnim {
+  0% { transform: scale(0) rotate(0deg); opacity: 1; }
+  50% { transform: scale(1.2) rotate(180deg); opacity: 0.8; }
+  100% { transform: scale(0) rotate(360deg); opacity: 0; }
+}
+
+/* === キャラクター（相沢 悠） === */
+#character {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  transform: translateX(-50%);
+  transition: all 0.6s ease;
+  z-index: 5;
+}
+
+.char-body {
+  position: relative;
+  width: 180px;
+  height: 340px;
+}
+
+.char-face {
+  width: 88px;
+  height: 92px;
+  background: #FFE0BD;
+  border-radius: 44px 44px 38px 38px;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.char-hair {
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 55px;
+  background: #1a1a2e;
+  border-radius: 50px 50px 8px 8px;
+  z-index: 3;
+}
+
+.char-hair-front {
+  position: absolute;
+  top: 15px;
+  left: 46px;
+  width: 35px;
+  height: 30px;
+  background: #1a1a2e;
+  clip-path: polygon(0% 0%, 100% 0%, 85% 100%, 15% 80%);
+  z-index: 5;
+}
+
+.char-hair-side-l, .char-hair-side-r {
+  position: absolute;
+  top: 20px;
+  width: 16px;
+  height: 50px;
+  background: #1a1a2e;
+  z-index: 3;
+}
+.char-hair-side-l { left: 35px; border-radius: 0 0 6px 6px; }
+.char-hair-side-r { right: 35px; border-radius: 0 0 6px 6px; }
+
+.char-eye {
+  position: absolute;
+  width: 12px;
+  height: 14px;
+  background: #1a1a2e;
+  border-radius: 50%;
+  top: 36px;
+  z-index: 4;
+}
+.char-eye.left { left: 57px; }
+.char-eye.right { right: 57px; }
+
+.char-eye-light {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: white;
+  border-radius: 50%;
+  top: 2px;
+  right: 2px;
+}
+
+.char-eyebrow {
+  position: absolute;
+  width: 16px;
+  height: 3px;
+  background: #1a1a2e;
+  border-radius: 2px;
+  top: 28px;
+  z-index: 4;
+}
+.char-eyebrow.left { left: 55px; }
+.char-eyebrow.right { right: 55px; }
+
+.char-mouth {
+  position: absolute;
+  top: 58px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 4;
+  transition: all 0.3s;
+}
+
+.mouth-normal { width: 10px; height: 5px; border-bottom: 2px solid #C4756B; border-radius: 0 0 5px 5px; }
+.mouth-smile { width: 16px; height: 9px; border-bottom: 2.5px solid #C4756B; border-radius: 0 0 9px 9px; }
+.mouth-grin { width: 20px; height: 12px; border-bottom: 2.5px solid #C4756B; border-radius: 0 0 12px 12px; }
+.mouth-surprise { width: 10px; height: 12px; background: #C4756B; border-radius: 50%; }
+.mouth-nervous { width: 14px; height: 3px; background: #C4756B; border-radius: 2px; }
+
+.char-blush {
+  position: absolute;
+  width: 16px;
+  height: 9px;
+  background: rgba(255,100,100,0.45);
+  border-radius: 50%;
+  top: 48px;
+  z-index: 4;
+  opacity: 0;
+  transition: opacity 0.5s;
+}
+.char-blush.left { left: 50px; }
+.char-blush.right { right: 50px; }
+.char-blush.visible { opacity: 1; }
+
+/* 制服（男子） */
+.char-blazer {
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 150px;
+  background: #1B3A5C;
+  border-radius: 8px 8px 0 0;
+  z-index: 1;
+}
+
+.char-shirt-collar {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 0;
+  border-left: 22px solid transparent;
+  border-right: 22px solid transparent;
+  border-top: 18px solid white;
+  z-index: 2;
+}
+
+.char-tie {
+  position: absolute;
+  top: 88px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 3;
+}
+.char-tie-knot {
+  width: 12px; height: 10px;
+  background: #C0392B;
+  clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
+  margin: 0 auto;
+}
+.char-tie-body {
+  width: 10px; height: 35px;
+  background: #C0392B;
+  clip-path: polygon(15% 0%, 85% 0%, 65% 100%, 35% 100%);
+  margin: 0 auto;
+}
+
+.char-pants {
+  position: absolute;
+  top: 232px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 105px;
+  height: 70px;
+  background: #2C3E50;
+  border-radius: 0 0 4px 4px;
+  z-index: 1;
+}
+
+/* 私服用（デート） */
+.char-casual-top {
+  position: absolute;
+  top: 85px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 108px;
+  height: 148px;
+  background: linear-gradient(180deg, #F5F5F5 0%, #E8E8E8 100%);
+  border-radius: 8px 8px 0 0;
+  z-index: 1;
+}
+
+.char-casual-collar {
+  position: absolute;
+  top: 80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 50px;
+  height: 14px;
+  background: #F5F5F5;
+  border-radius: 0 0 10px 10px;
+  z-index: 2;
+}
+
+.char-jacket {
+  position: absolute;
+  top: 82px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 155px;
+  background: #2C3E50;
+  border-radius: 8px 8px 0 0;
+  z-index: 0;
+  clip-path: polygon(0% 0%, 35% 0%, 35% 100%, 0% 100%, 0% 0%, 65% 0%, 65% 100%, 100% 100%, 100% 0%);
+}
+
+.char-casual-pants {
+  position: absolute;
+  top: 230px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 72px;
+  background: #1a1a2e;
+  border-radius: 0 0 4px 4px;
+  z-index: 1;
+}
+
+/* === テキストボックス === */
+#textbox {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(180deg, rgba(10,14,30,0.85) 0%, rgba(20,25,50,0.95) 100%);
+  border-top: 2px solid rgba(173,216,230,0.4);
+  z-index: 20;
+  padding: 20px 40px;
+  display: flex;
+  flex-direction: column;
+}
+
+#speaker {
+  font-family: 'Zen Old Mincho', serif;
+  color: #ADD8E6;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 8px;
+  min-height: 24px;
+  text-shadow: 0 0 10px rgba(173,216,230,0.4);
+}
+
+#dialogue {
+  font-family: 'Zen Maru Gothic', sans-serif;
+  color: #E8EAF0;
+  font-size: 17px;
+  line-height: 1.8;
+  flex: 1;
+  letter-spacing: 0.5px;
+}
+
+#click-indicator {
+  position: absolute;
+  bottom: 15px;
+  right: 30px;
+  color: rgba(173,216,230,0.6);
+  font-size: 14px;
+  animation: blink 1.2s ease-in-out infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 1; }
+}
+
+/* === 選択肢 === */
+#choices {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 30;
+  display: none;
+  flex-direction: column;
+  gap: 16px;
+  width: 500px;
+  max-width: 90vw;
+}
+
+.choice-btn {
+  background: linear-gradient(135deg, rgba(15,20,50,0.9) 0%, rgba(30,40,80,0.9) 100%);
+  border: 2px solid rgba(173,216,230,0.4);
+  color: #D0E8F0;
+  padding: 16px 28px;
+  font-size: 16px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-align: left;
+  letter-spacing: 0.5px;
+}
+
+.choice-btn:hover {
+  background: linear-gradient(135deg, rgba(40,60,120,0.95) 0%, rgba(60,90,160,0.95) 100%);
+  border-color: #87CEEB;
+  transform: translateX(8px);
+  box-shadow: 0 0 20px rgba(135,206,235,0.3);
+}
+
+/* === タイトル画面 === */
+#title-screen {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #0a0e1e 0%, #141e3c 30%, #1a2850 60%, #0a0e1e 100%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+#title-screen h1 {
+  font-family: 'Zen Old Mincho', serif;
+  color: #ADD8E6;
+  font-size: 42px;
+  text-shadow: 0 0 30px rgba(173,216,230,0.4), 0 0 60px rgba(135,206,235,0.2);
+  margin-bottom: 12px;
+  letter-spacing: 4px;
+}
+
+#title-screen .subtitle {
+  font-family: 'Zen Old Mincho', serif;
+  color: rgba(173,216,230,0.6);
+  font-size: 18px;
+  letter-spacing: 6px;
+  margin-bottom: 15px;
+}
+
+#title-screen .prev-story {
+  color: rgba(255,182,193,0.5);
+  font-size: 13px;
+  letter-spacing: 2px;
+  margin-bottom: 50px;
+}
+
+#title-screen .start-text {
+  color: rgba(200,220,240,0.5);
+  font-size: 15px;
+  animation: blink 1.5s ease-in-out infinite;
+  letter-spacing: 2px;
+}
+
+.title-gift {
+  font-size: 80px;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 20px rgba(100,149,237,0.4));
+}
+
+.title-float {
+  position: absolute;
+  opacity: 0.1;
+  animation: titleFloat linear infinite;
+}
+
+@keyframes titleFloat {
+  0% { transform: translateY(100vh) rotate(0deg); }
+  100% { transform: translateY(-100px) rotate(360deg); }
+}
+
+/* === エンディング === */
+#ending-screen {
+  position: absolute;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px;
+}
+
+.ending-true {
+  background: linear-gradient(135deg, #0a0e1e 0%, #1a1040 20%, #2a1555 40%, #1a1040 60%, #0a0e1e 100%);
+}
+
+.ending-sweet {
+  background: linear-gradient(135deg, #0a0e1e 0%, #1a2040 30%, #1a3050 60%, #0a0e1e 100%);
+}
+
+.ending-bittersweet {
+  background: linear-gradient(135deg, #0a0a15 0%, #151525 50%, #0a0a15 100%);
+}
+
+#ending-screen h2 {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 36px;
+  margin-bottom: 30px;
+  letter-spacing: 3px;
+}
+
+#ending-screen .ending-text {
+  font-size: 17px;
+  line-height: 2.2;
+  color: #D0D8E8;
+  max-width: 600px;
+  margin-bottom: 50px;
+}
+
+#ending-screen .ending-label {
+  font-family: 'Zen Old Mincho', serif;
+  font-size: 14px;
+  letter-spacing: 4px;
+  margin-bottom: 40px;
+}
+
+.retry-btn {
+  background: transparent;
+  border: 1px solid rgba(173,216,230,0.4);
+  color: #ADD8E6;
+  padding: 12px 40px;
+  font-size: 15px;
+  font-family: 'Zen Maru Gothic', sans-serif;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  letter-spacing: 2px;
+  margin: 8px;
+}
+
+.retry-btn:hover {
+  background: rgba(173,216,230,0.1);
+  border-color: #87CEEB;
+  box-shadow: 0 0 20px rgba(135,206,235,0.2);
+}
+
+/* === ギフト演出 === */
+#gift-item {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  z-index: 15;
+  font-size: 110px;
+  transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  filter: drop-shadow(0 0 25px rgba(100,149,237,0.5));
+}
+
+#gift-item.show {
+  transform: translate(-50%, -50%) scale(1);
+}
+
+/* === トランジション === */
+#transition {
+  position: absolute;
+  inset: 0;
+  background: black;
+  z-index: 40;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+}
+
+#transition.active {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* === 好感度メーター === */
+#trust-meter {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  z-index: 25;
+  display: none;
+  align-items: center;
+  gap: 8px;
+  background: rgba(10,14,30,0.7);
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(173,216,230,0.3);
+}
+
+#trust-meter .trust-icon {
+  color: #87CEEB;
+  font-size: 16px;
+}
+
+#trust-bar {
+  width: 100px;
+  height: 8px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+#trust-fill {
+  height: 100%;
+  width: 40%;
+  background: linear-gradient(90deg, #87CEEB, #6495ED);
+  border-radius: 4px;
+  transition: width 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* === CG演出 === */
+#cg-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 1.5s ease;
+}
+
+.cg-starlight {
+  background: radial-gradient(ellipse at 50% 30%, rgba(100,149,237,0.15) 0%, transparent 60%);
+}
+
+.cg-fireworks {
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,100,100,0.15) 0%, transparent 30%),
+              radial-gradient(ellipse at 70% 25%, rgba(100,200,255,0.15) 0%, transparent 30%),
+              radial-gradient(ellipse at 50% 15%, rgba(255,215,0,0.1) 0%, transparent 25%);
+}
+
+/* === 回想シーン === */
+.memory-vignette {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(255,182,193,0.15) 100%);
+  z-index: 11;
+  pointer-events: none;
+  display: none;
+}
+
+/* レスポンシブ */
+@media (max-width: 600px) {
+  #title-screen h1 { font-size: 28px; }
+  .title-gift { font-size: 60px; }
+  #textbox { height: 180px; padding: 15px 20px; }
+  #dialogue { font-size: 15px; }
+  .choice-btn { font-size: 14px; padding: 12px 20px; }
+}
+</style>
+</head>
+<body>
+<div id="game">
+  <div id="transition"></div>
+
+  <!-- タイトル画面 -->
+  <div id="title-screen">
+    <div class="title-gift">🎁</div>
+    <h1>ホワイトデー・ストーリー</h1>
+    <div class="subtitle">~ あの日の答え ~</div>
+    <div class="prev-story">「バレンタイン・ストーリー」GOOD END 後日譚</div>
+    <div class="start-text">- クリックでスタート -</div>
+  </div>
+
+  <div id="bg"></div>
+  <div id="cg-overlay"></div>
+  <div class="memory-vignette" id="memory-vignette"></div>
+
+  <!-- キャラクター -->
+  <div id="character" style="display:none;">
+    <div class="char-body" id="char-body">
+      <!-- 髪 -->
+      <div class="char-hair"></div>
+      <div class="char-hair-front"></div>
+      <div class="char-hair-side-l"></div>
+      <div class="char-hair-side-r"></div>
+      <!-- 顔 -->
+      <div class="char-face">
+        <div class="char-eyebrow left"></div>
+        <div class="char-eyebrow right"></div>
+        <div class="char-eye left"><div class="char-eye-light"></div></div>
+        <div class="char-eye right"><div class="char-eye-light"></div></div>
+        <div class="char-blush left"></div>
+        <div class="char-blush right"></div>
+        <div class="char-mouth"><div class="mouth-normal"></div></div>
+      </div>
+      <!-- 制服 -->
+      <div id="outfit-school">
+        <div class="char-shirt-collar"></div>
+        <div class="char-tie"><div class="char-tie-knot"></div><div class="char-tie-body"></div></div>
+        <div class="char-blazer"></div>
+        <div class="char-pants"></div>
+      </div>
+      <!-- 私服（非表示） -->
+      <div id="outfit-casual" style="display:none;">
+        <div class="char-jacket"></div>
+        <div class="char-casual-collar"></div>
+        <div class="char-casual-top"></div>
+        <div class="char-casual-pants"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ギフト演出 -->
+  <div id="gift-item">🎁</div>
+
+  <!-- 信頼度メーター -->
+  <div id="trust-meter">
+    <span class="trust-icon">&#10038;</span>
+    <div id="trust-bar">
+      <div id="trust-fill"></div>
+    </div>
+  </div>
+
+  <!-- テキストボックス -->
+  <div id="textbox" style="display:none;">
+    <div id="speaker"></div>
+    <div id="dialogue"></div>
+    <div id="click-indicator">&#9660;</div>
+  </div>
+
+  <div id="choices"></div>
+  <div id="ending-screen"></div>
+</div>
+
+<script>
+const state = {
+  trust: 40,
+  phase: 'title',
+  typing: false,
+  typeTimeout: null,
+  currentText: '',
+  dateChoice: '',
+  giftChoice: '',
+};
+
+const $ = id => document.getElementById(id);
+const bg = $('bg');
+const character = $('character');
+const textbox = $('textbox');
+const speaker = $('speaker');
+const dialogue = $('dialogue');
+const choices = $('choices');
+const transition = $('transition');
+const giftItem = $('gift-item');
+const trustMeter = $('trust-meter');
+const trustFill = $('trust-fill');
+const titleScreen = $('title-screen');
+const endingScreen = $('ending-screen');
+const cgOverlay = $('cg-overlay');
+
+// タイトルの浮遊要素
+(function createTitleFloats() {
+  const symbols = ['✦', '♦', '✧', '◇', '❋'];
+  for (let i = 0; i < 12; i++) {
+    const el = document.createElement('div');
+    el.className = 'title-float';
+    el.textContent = symbols[i % symbols.length];
+    el.style.left = Math.random() * 100 + '%';
+    el.style.fontSize = (12 + Math.random() * 18) + 'px';
+    el.style.color = Math.random() > 0.5 ? '#ADD8E6' : '#FFB6C1';
+    el.style.animationDuration = (7 + Math.random() * 8) + 's';
+    el.style.animationDelay = Math.random() * 8 + 's';
+    titleScreen.appendChild(el);
+  }
+})();
+
+function updateTrust(val) {
+  state.trust = Math.max(0, Math.min(100, state.trust + val));
+  trustFill.style.width = state.trust + '%';
+}
+
+function setExpression(expr) {
+  const mouth = document.querySelector('.char-mouth');
+  const blushL = document.querySelector('.char-blush.left');
+  const blushR = document.querySelector('.char-blush.right');
+  const browL = document.querySelector('.char-eyebrow.left');
+  const browR = document.querySelector('.char-eyebrow.right');
+
+  browL.style.transform = '';
+  browR.style.transform = '';
+
+  const expressions = {
+    normal:   { m: 'normal',   blush: false },
+    smile:    { m: 'smile',    blush: false },
+    grin:     { m: 'grin',     blush: false },
+    blush:    { m: 'smile',    blush: true },
+    surprise: { m: 'surprise', blush: false },
+    shy:      { m: 'normal',   blush: true },
+    happy:    { m: 'grin',     blush: true },
+    nervous:  { m: 'nervous',  blush: true, brow: 'worry' },
+    serious:  { m: 'normal',   blush: false, brow: 'flat' },
+  };
+
+  const e = expressions[expr] || expressions.normal;
+  mouth.innerHTML = `<div class="mouth-${e.m}"></div>`;
+  blushL.classList.toggle('visible', e.blush);
+  blushR.classList.toggle('visible', e.blush);
+
+  if (e.brow === 'worry') {
+    browL.style.transform = 'rotate(8deg)';
+    browR.style.transform = 'rotate(-8deg)';
+  }
+}
+
+function setOutfit(type) {
+  $('outfit-school').style.display = type === 'school' ? '' : 'none';
+  $('outfit-casual').style.display = type === 'casual' ? '' : 'none';
+}
+
+function setBg(name) {
+  bg.className = 'bg-' + name;
+  bg.innerHTML = '';
+
+  if (name === 'classroom-morning') {
+    for (let i = 0; i < 3; i++) {
+      const w = document.createElement('div');
+      w.className = 'bg-detail window-frame';
+      bg.appendChild(w);
+    }
+  }
+  if (name === 'rooftop-sunset') {
+    const f = document.createElement('div');
+    f.className = 'bg-detail fence';
+    bg.appendChild(f);
+  }
+  if (name === 'street-night') {
+    for (let i = 0; i < 40; i++) {
+      const s = document.createElement('div');
+      s.className = 'bg-detail star';
+      s.style.left = Math.random() * 100 + '%';
+      s.style.top = Math.random() * 35 + '%';
+      s.style.animationDelay = Math.random() * 3 + 's';
+      s.style.width = s.style.height = (1 + Math.random() * 2) + 'px';
+      bg.appendChild(s);
+    }
+  }
+  if (name === 'aquarium') {
+    for (let i = 0; i < 12; i++) {
+      const b = document.createElement('div');
+      b.className = 'bg-detail bubble';
+      b.style.left = Math.random() * 100 + '%';
+      b.style.bottom = '-20px';
+      b.style.width = b.style.height = (5 + Math.random() * 15) + 'px';
+      b.style.animationDuration = (5 + Math.random() * 6) + 's';
+      b.style.animationDelay = Math.random() * 8 + 's';
+      bg.appendChild(b);
+    }
+    const fishes = ['🐠', '🐟', '🐡'];
+    for (let i = 0; i < 3; i++) {
+      const f = document.createElement('div');
+      f.className = 'bg-detail fish';
+      f.textContent = fishes[i];
+      f.style.top = (25 + Math.random() * 40) + '%';
+      f.style.animationDuration = (12 + Math.random() * 8) + 's';
+      f.style.animationDelay = (i * 4 + Math.random() * 3) + 's';
+      bg.appendChild(f);
+    }
+  }
+  if (name === 'cafe') {
+    for (let i = 0; i < 3; i++) {
+      const l = document.createElement('div');
+      l.className = 'bg-detail cafe-light';
+      l.style.left = (10 + i * 35) + '%';
+      l.style.top = (5 + i * 10) + '%';
+      bg.appendChild(l);
+    }
+  }
+}
+
+function typeText(name, text) {
+  return new Promise(resolve => {
+    speaker.textContent = name;
+    dialogue.textContent = '';
+    state.typing = true;
+    state.currentText = text;
+    let i = 0;
+    function next() {
+      if (i < text.length) {
+        dialogue.textContent += text[i]; i++;
+        state.typeTimeout = setTimeout(next, 35);
+      } else { state.typing = false; resolve(); }
+    }
+    next();
+  });
+}
+
+function skipType() {
+  if (state.typing) {
+    clearTimeout(state.typeTimeout);
+    dialogue.textContent = state.currentText;
+    state.typing = false;
+    return true;
+  }
+  return false;
+}
+
+function showChoices(list) {
+  return new Promise(resolve => {
+    choices.innerHTML = '';
+    choices.style.display = 'flex';
+    $('click-indicator').style.display = 'none';
+    list.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice-btn';
+      btn.textContent = c.text;
+      btn.addEventListener('click', () => {
+        choices.style.display = 'none';
+        $('click-indicator').style.display = '';
+        resolve(c);
+      });
+      btn.style.opacity = '0';
+      btn.style.transform = 'translateX(-20px)';
+      btn.style.transition = 'all 0.4s ease';
+      setTimeout(() => { btn.style.opacity = '1'; btn.style.transform = 'translateX(0)'; }, 100 + i * 120);
+      choices.appendChild(btn);
+    });
+  });
+}
+
+function fadeOut() { return new Promise(r => { transition.classList.add('active'); setTimeout(r, 700); }); }
+function fadeIn() { return new Promise(r => { transition.classList.remove('active'); setTimeout(r, 700); }); }
+
+function showGift(emoji) {
+  return new Promise(r => {
+    giftItem.textContent = emoji || '🎁';
+    giftItem.classList.add('show');
+    setTimeout(() => { giftItem.classList.remove('show'); r(); }, 1800);
+  });
+}
+
+function spawnHearts(count = 8) {
+  for (let i = 0; i < count; i++) {
+    const h = document.createElement('div');
+    h.className = 'heart-particle';
+    h.textContent = '♥';
+    h.style.left = (30 + Math.random() * 40) + '%';
+    h.style.top = (40 + Math.random() * 20) + '%';
+    h.style.animationDelay = (Math.random() * 1) + 's';
+    h.style.fontSize = (12 + Math.random() * 16) + 'px';
+    $('game').appendChild(h);
+    setTimeout(() => h.remove(), 4500);
+  }
+}
+
+function spawnSparkles(count = 10) {
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'sparkle';
+    s.textContent = '✦';
+    s.style.left = (20 + Math.random() * 60) + '%';
+    s.style.top = (20 + Math.random() * 40) + '%';
+    s.style.animationDelay = (Math.random() * 0.8) + 's';
+    $('game').appendChild(s);
+    setTimeout(() => s.remove(), 2500);
+  }
+}
+
+function spawnSakura() {
+  for (let i = 0; i < 25; i++) {
+    const p = document.createElement('div');
+    p.className = 'sakura-petal';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (4 + Math.random() * 4) + 's';
+    p.style.animationDelay = Math.random() * 6 + 's';
+    $('game').appendChild(p);
+    setTimeout(() => p.remove(), 11000);
+  }
+}
+
+function waitClick() {
+  return new Promise(resolve => {
+    function handler() {
+      if (!skipType()) { document.removeEventListener('click', handler); resolve(); }
+    }
+    document.addEventListener('click', handler);
+  });
+}
+
+function showEnding(type, title, text, color) {
+  endingScreen.className = 'ending-' + type;
+  endingScreen.style.display = 'flex';
+  endingScreen.innerHTML = `
+    <div class="ending-label" style="color:${color}; opacity:0.6;">— ${type.toUpperCase()} END —</div>
+    <h2 style="color:${color};">${title}</h2>
+    <div class="ending-text">${text}</div>
+    <div>
+      <button class="retry-btn" onclick="location.reload()">もう一度最初から</button>
+      <button class="retry-btn" onclick="location.href='index.html'">バレンタイン編へ</button>
+    </div>
+  `;
+  textbox.style.display = 'none';
+  character.style.display = 'none';
+}
+
+// ========== メインシナリオ ==========
+async function startGame() {
+  await fadeOut();
+  titleScreen.style.display = 'none';
+  setBg('classroom-morning');
+  textbox.style.display = '';
+  await fadeIn();
+
+  // === プロローグ ===
+  await typeText('', '3月14日 ── ホワイトデー。'); await waitClick();
+  await typeText('', 'バレンタインにチョコを渡してから、ちょうど1ヶ月。'); await waitClick();
+  await typeText('', 'あの日から、相沢くんとの距離は確実に近くなった。'); await waitClick();
+  await typeText('', '……でも、まだ「お返事」はもらっていない。'); await waitClick();
+
+  // 回想
+  $('memory-vignette').style.display = '';
+  await typeText('', '── あの日の言葉が、ずっと胸の中で響いている。'); await waitClick();
+  await typeText('相沢 悠', '『ホワイトデー、絶対返すから。……待っててくれ。』'); await waitClick();
+  $('memory-vignette').style.display = 'none';
+
+  await typeText('', '今日がその日だ。'); await waitClick();
+  await typeText('', '朝のホームルームが始まる前。教室に入ると──'); await waitClick();
+
+  // キャラ登場
+  character.style.display = '';
+  character.style.opacity = '0';
+  setOutfit('school');
+  setExpression('nervous');
+  setTimeout(() => character.style.opacity = '1', 50);
+  trustMeter.style.display = 'flex';
+
+  await typeText('相沢 悠', '……あ。おはよう。'); await waitClick();
+  await typeText('', '相沢くんの声が、いつもより少し硬い。'); await waitClick();
+  await typeText('', '手元をちらりと見ると、カバンを妙に大事そうに抱えていた。'); await waitClick();
+
+  setExpression('shy');
+  await typeText('相沢 悠', '……えっと、今日さ。放課後、時間あるか？'); await waitClick();
+
+  // 選択1: 反応
+  const react = await showChoices([
+    { text: '「うん、空けてあるよ」素直に嬉しそうに答える', value: 'happy', aff: 10 },
+    { text: '「……もしかして、今日って何かあったっけ？」とぼける', value: 'tease', aff: 5 },
+    { text: '「放課後？ ……うん」ドキドキを隠して頷く', value: 'calm', aff: 8 },
+  ]);
+  updateTrust(react.aff);
+
+  if (react.value === 'happy') {
+    setExpression('blush');
+    await typeText('相沢 悠', '……そっか。よかった。'); await waitClick();
+    await typeText('', '少しだけ、安心したような顔をした。'); await waitClick();
+    spawnHearts(3);
+  } else if (react.value === 'tease') {
+    setExpression('surprise');
+    await typeText('相沢 悠', 'え……いや、3月14日だろ。ホワイトデー。'); await waitClick();
+    setExpression('nervous');
+    await typeText('相沢 悠', '忘れてたのか……？ いや、まあいいけど。'); await waitClick();
+    await typeText('', '少し焦った顔が、なんだかおかしくて笑ってしまった。'); await waitClick();
+    setExpression('shy');
+    await typeText('相沢 悠', '……笑うなよ。'); await waitClick();
+  } else {
+    setExpression('smile');
+    await typeText('相沢 悠', 'おう。じゃあ、放課後な。'); await waitClick();
+    await typeText('', '短く言って、前を向いた。耳が少し赤い。'); await waitClick();
+  }
+
+  await typeText('', '── また、長い授業が始まる。'); await waitClick();
+  await typeText('', '時計の針が、今日もゆっくりに感じた。'); await waitClick();
+
+  // === 昼休み ===
+  await fadeOut();
+  setBg('hallway-afternoon');
+  character.style.display = 'none';
+  await fadeIn();
+
+  await typeText('', '昼休み。友達に声をかけられた。'); await waitClick();
+  await typeText('友人', '相沢くんと放課後デートでしょ？ 聞いたよ～！'); await waitClick();
+  await typeText('', '……声が大きい。'); await waitClick();
+  await typeText('友人', 'ねえねえ、どこ行くか聞いた？'); await waitClick();
+  await typeText('', '首を横に振ると、友人はにやりと笑った。'); await waitClick();
+  await typeText('友人', 'サプライズってやつかもね。楽しみだね～'); await waitClick();
+  await typeText('', '……楽しみ、というか。緊張しかない。'); await waitClick();
+
+  // === 放課後 - 待ち合わせ ===
+  await fadeOut();
+  setBg('classroom-morning');
+  character.style.display = '';
+  setExpression('serious');
+  await fadeIn();
+
+  await typeText('', '放課後。教室にはもう、ほとんど人がいない。'); await waitClick();
+  await typeText('相沢 悠', '……待たせたか？'); await waitClick();
+  await typeText('', '相沢くんが制服のまま──いや、少しだけ身だしなみを整えている。'); await waitClick();
+  await typeText('', 'ネクタイがいつもよりきちんと結ばれている。'); await waitClick();
+
+  setExpression('smile');
+  await typeText('相沢 悠', '今日、ちょっと付き合ってくれ。'); await waitClick();
+
+  // 選択2: デート先（相沢が提案、プレイヤーが選ぶ）
+  await typeText('相沢 悠', '行きたいところ、あるか？ 俺に合わせてくれるなら……');
+  const date = await showChoices([
+    { text: '「相沢くんに任せる」── 彼の計画を信じる', value: 'trust', aff: 15 },
+    { text: '「水族館に行ってみたいな」── ずっと行きたかった場所', value: 'aquarium', aff: 10 },
+    { text: '「どこでもいいよ、一緒なら」── 正直に伝える', value: 'together', aff: 12 },
+  ]);
+  updateTrust(date.aff);
+  state.dateChoice = date.value;
+
+  // === 場面転換: デート ===
+  await fadeOut();
+  character.style.display = '';
+  setOutfit('casual');
+
+  if (date.value === 'aquarium') {
+    setBg('aquarium');
+    await fadeIn();
+
+    setExpression('smile');
+    await typeText('', '── 水族館。青い光に包まれた、静かな空間。'); await waitClick();
+    await typeText('相沢 悠', '水族館、好きなのか？'); await waitClick();
+    await typeText('', '「うん。なんか落ち着くんだよね」'); await waitClick();
+    setExpression('grin');
+    await typeText('相沢 悠', '……わかる。外の世界と切り離された感じがいいよな。'); await waitClick();
+    await typeText('', '大きな水槽の前で、二人並んで立つ。'); await waitClick();
+    await typeText('', '青い光が相沢くんの横顔を照らしていて、'); await waitClick();
+    await typeText('', 'どきっとするくらい、綺麗だと思った。'); await waitClick();
+
+    // 選択3: 水族館での反応
+    await typeText('', 'クラゲのコーナーで足を止めた。ゆらゆら揺れる光。');
+    const aquaReact = await showChoices([
+      { text: '「きれい……」思わず手を伸ばすと、指が触れた', value: 'touch', aff: 12 },
+      { text: '「相沢くんもクラゲみたいだね」── つい変なことを', value: 'joke', aff: 5 },
+      { text: '静かに隣に寄り添う', value: 'close', aff: 10 },
+    ]);
+    updateTrust(aquaReact.aff);
+
+    if (aquaReact.value === 'touch') {
+      setExpression('blush');
+      await typeText('', '指先が触れた瞬間、二人とも固まった。'); await waitClick();
+      await typeText('相沢 悠', '……っ。'); await waitClick();
+      await typeText('', 'でも──離さなかった。'); await waitClick();
+      spawnHearts(5);
+      await typeText('', 'そっと、指が絡まる。'); await waitClick();
+      setExpression('happy');
+      await typeText('相沢 悠', '……手、冷たいな。温めてやる。'); await waitClick();
+    } else if (aquaReact.value === 'joke') {
+      setExpression('surprise');
+      await typeText('相沢 悠', '……はあ？ クラゲ？'); await waitClick();
+      setExpression('smile');
+      await typeText('相沢 悠', 'どういう意味だよ、それ。'); await waitClick();
+      await typeText('', '「ふわふわしてて、見てると落ち着くところ」'); await waitClick();
+      setExpression('blush');
+      await typeText('相沢 悠', '……それ褒めてるのか？ まあ……ありがとう。'); await waitClick();
+    } else {
+      setExpression('smile');
+      await typeText('', '肩が触れるくらいの距離。'); await waitClick();
+      await typeText('', '何も言わなくても、心地いい。'); await waitClick();
+      setExpression('blush');
+      await typeText('相沢 悠', '……近いな。……いや、いいけど。'); await waitClick();
+    }
+  } else {
+    // trust / together → カフェ → 公園コース
+    setBg('cafe');
+    await fadeIn();
+
+    setExpression('smile');
+    await typeText('', '── 駅前の小さなカフェに入った。'); await waitClick();
+    await typeText('', '窓際の席。温かいカフェラテを頼んだ。'); await waitClick();
+    await typeText('相沢 悠', '何にする？ 今日は俺が出すから。'); await waitClick();
+
+    if (date.value === 'trust') {
+      await typeText('', '「ありがとう。じゃあ……ケーキセットで」'); await waitClick();
+      setExpression('grin');
+      await typeText('相沢 悠', '了解。俺も同じの。'); await waitClick();
+    } else {
+      await typeText('', '「一緒のでいいよ」'); await waitClick();
+      setExpression('blush');
+      await typeText('相沢 悠', '……おそろい、か。いいな。'); await waitClick();
+    }
+
+    await typeText('', 'ケーキを食べながら、他愛もない話をした。'); await waitClick();
+    await typeText('', '最近見た映画のこと。来週のテストのこと。'); await waitClick();
+    await typeText('', 'なんでもない会話が、こんなに楽しいなんて。'); await waitClick();
+
+    // 選択3: カフェでの会話
+    await typeText('相沢 悠', 'なあ……一個、聞いてもいいか？');
+    setExpression('serious');
+    await typeText('相沢 悠', 'バレンタインのとき……あのチョコ、いつから準備してたんだ？');
+
+    const cafeReact = await showChoices([
+      { text: '「前日の夜に必死で作った」── 正直に言う', value: 'honest', aff: 12 },
+      { text: '「1週間くらい前から練習してたんだ……」', value: 'effort', aff: 15 },
+      { text: '「秘密」── 少しだけ意地悪に笑う', value: 'secret', aff: 5 },
+    ]);
+    updateTrust(cafeReact.aff);
+
+    if (cafeReact.value === 'honest') {
+      setExpression('surprise');
+      await typeText('相沢 悠', '前日!? ……でも、すごく美味しかったぞ。'); await waitClick();
+      setExpression('smile');
+      await typeText('相沢 悠', '才能あるんじゃないか、お菓子作り。'); await waitClick();
+      spawnHearts(3);
+    } else if (cafeReact.value === 'effort') {
+      setExpression('blush');
+      await typeText('相沢 悠', '……一週間。'); await waitClick();
+      await typeText('', '相沢くんが目をそらした。でも、耳が真っ赤だ。'); await waitClick();
+      await typeText('相沢 悠', '……ありがとうな。マジで嬉しかった。'); await waitClick();
+      spawnHearts(5);
+    } else {
+      setExpression('smile');
+      await typeText('相沢 悠', '秘密か……まあ、いつか教えてくれよ。'); await waitClick();
+    }
+  }
+
+  // === お返しの場面 ===
+  await fadeOut();
+  if (state.trust >= 65) {
+    setBg('rooftop-sunset');
+  } else if (state.dateChoice === 'aquarium') {
+    setBg('park-evening');
+  } else {
+    setBg('street-night');
+  }
+  character.style.display = '';
+  setExpression('nervous');
+  await fadeIn();
+
+  if (state.trust >= 65) {
+    await typeText('', '夕暮れの屋上。あの日と同じ場所。'); await waitClick();
+    await typeText('', 'オレンジ色の空が、世界を優しく染めている。'); await waitClick();
+  } else if (state.dateChoice === 'aquarium') {
+    await typeText('', '水族館を出ると、空が紫に染まっていた。'); await waitClick();
+    await typeText('', '近くの公園のベンチに並んで座る。'); await waitClick();
+  } else {
+    await typeText('', '帰り道。街灯が静かに灯り始めた。'); await waitClick();
+    await typeText('', '相沢くんが急に立ち止まった。'); await waitClick();
+  }
+
+  setExpression('serious');
+  await typeText('相沢 悠', '──なあ。'); await waitClick();
+  await typeText('', '相沢くんの声のトーンが変わった。'); await waitClick();
+  await typeText('相沢 悠', '1ヶ月、待たせたな。'); await waitClick();
+
+  setExpression('nervous');
+  await typeText('', '相沢くんがカバンから何かを取り出す。'); await waitClick();
+  await typeText('', '──小さな、綺麗に包まれた箱。'); await waitClick();
+
+  // 選択4: お返しの受け取り方
+  await typeText('', '差し出された箱を見て、心臓が跳ねる。');
+  const receive = await showChoices([
+    { text: '「……開けてもいい？」── 今すぐ見たい', value: 'open', aff: 10 },
+    { text: '両手で大切に受け取る ── 言葉より先に、気持ちで', value: 'careful', aff: 15 },
+    { text: '「お返し……ってことは」── 答えを聞きたい', value: 'answer', aff: 12 },
+  ]);
+  updateTrust(receive.aff);
+  state.giftChoice = receive.value;
+
+  await showGift('🎁');
+  spawnSparkles(8);
+
+  if (receive.value === 'open') {
+    setExpression('blush');
+    await typeText('相沢 悠', '……ああ。開けてくれ。'); await waitClick();
+    await typeText('', '包みを解くと、中には──'); await waitClick();
+  } else if (receive.value === 'careful') {
+    setExpression('happy');
+    await typeText('', '両手でそっと受け取った。温かい。'); await waitClick();
+    await typeText('相沢 悠', '……開けてみてくれ。'); await waitClick();
+    await typeText('', '丁寧にリボンをほどく。中には──'); await waitClick();
+  } else {
+    setExpression('shy');
+    await typeText('相沢 悠', '……まあ、とりあえず開けろよ。'); await waitClick();
+    await typeText('', '少し焦ったように促されて、箱を開ける。中には──'); await waitClick();
+  }
+
+  // ===== エンディング分岐 =====
+  if (state.trust >= 70) {
+    // TRUE END
+    spawnHearts(10);
+    await showGift('💍');
+
+    await typeText('', '繊細なデザインのペアリングが入っていた。'); await waitClick();
+    await typeText('', '銀色の細いリングに、小さな石がひとつ。'); await waitClick();
+
+    setExpression('blush');
+    await typeText('相沢 悠', '……クッキーとかマシュマロとかも考えたんだけどさ。'); await waitClick();
+    await typeText('相沢 悠', 'あのチョコもらった時、形に残るもので返したいって思って。'); await waitClick();
+    setExpression('happy');
+
+    // CG演出
+    if (state.trust >= 65) {
+      cgOverlay.className = 'cg-fireworks';
+      cgOverlay.style.display = 'flex';
+      cgOverlay.style.opacity = '0';
+      setTimeout(() => cgOverlay.style.opacity = '1', 50);
+    }
+
+    await typeText('相沢 悠', '改めて言わせてくれ。'); await waitClick();
+    spawnSakura();
+    spawnHearts(20);
+
+    await typeText('相沢 悠', '── 好きだ。これからも、ずっと隣にいてほしい。'); await waitClick();
+    await typeText('', '…………。'); await waitClick();
+    await typeText('', '涙が止まらなかった。'); await waitClick();
+    await typeText('', '「……私も。ずっと、ずっと好きだよ」'); await waitClick();
+
+    setExpression('happy');
+    await typeText('', '指にリングをはめてくれた相沢くんの手は、少し震えていた。'); await waitClick();
+    spawnHearts(15);
+    await typeText('', '夕焼けの中、二人の影が重なる。'); await waitClick();
+    await typeText('', '── この手を、もう離さない。'); await waitClick();
+
+    await fadeOut();
+    showEnding('true', '永遠のリング',
+      'あの日のチョコレートは、<br>こんなにも美しい形になって返ってきました。<br><br>バレンタインに始まった物語は、<br>ホワイトデーに答え合わせを迎え──<br><br>そしてこれからも、ずっと続いていきます。',
+      '#B8A9FF');
+    spawnHearts(20);
+    setInterval(() => { spawnHearts(5); spawnSakura(); }, 3000);
+
+  } else if (state.trust >= 45) {
+    // SWEET END
+    spawnSparkles(12);
+    await showGift('🧁');
+
+    await typeText('', '手作りのカップケーキが入っていた。'); await waitClick();
+    await typeText('', '少し不格好だけど、丁寧にデコレーションされている。'); await waitClick();
+
+    setExpression('nervous');
+    await typeText('相沢 悠', '……笑うなよ。初めて作ったんだ。'); await waitClick();
+    await typeText('相沢 悠', 'お前が手作りしてくれたから、俺も自分で作りたくて。'); await waitClick();
+
+    setExpression('blush');
+    await typeText('相沢 悠', '3回くらい失敗して、やっとこれが。'); await waitClick();
+    await typeText('', '「……3回も？」'); await waitClick();
+    setExpression('shy');
+    await typeText('相沢 悠', 'うるさいな。気持ちの問題だろ。'); await waitClick();
+    spawnHearts(8);
+    await typeText('', 'その不器用さが、たまらなく愛おしかった。'); await waitClick();
+    await typeText('', '「ありがとう。食べるの楽しみ」'); await waitClick();
+    setExpression('smile');
+    await typeText('相沢 悠', '……あと。これからもよろしくな。彼女として。'); await waitClick();
+    await typeText('', 'さらっと言ったくせに、目を合わせてくれない。'); await waitClick();
+    spawnHearts(10);
+    await typeText('', '── 甘い甘い、ホワイトデー。'); await waitClick();
+
+    await fadeOut();
+    showEnding('sweet', '不器用な手作り',
+      '3回失敗したカップケーキ。<br>その不器用な優しさが、何よりも嬉しかった。<br><br>まだぎこちないけれど、<br>二人の歩幅は少しずつ揃っていく。<br><br>春が来る。二人の春が。',
+      '#87CEEB');
+    spawnHearts(10);
+    setInterval(() => spawnHearts(3), 3000);
+
+  } else {
+    // BITTERSWEET END
+    await showGift('🍪');
+
+    await typeText('', '綺麗にラッピングされたクッキーの詰め合わせ。'); await waitClick();
+    await typeText('', '市販のものだけど、選び抜かれた感じがする。'); await waitClick();
+
+    setExpression('shy');
+    await typeText('相沢 悠', '……ありがとうな、バレンタイン。嬉しかったよ。'); await waitClick();
+    await typeText('', '「うん」'); await waitClick();
+    setExpression('serious');
+    await typeText('相沢 悠', '正直、まだ自分の気持ちがよくわかってない。'); await waitClick();
+    await typeText('相沢 悠', 'でも、お前と一緒にいると楽しいのは本当だ。'); await waitClick();
+    setExpression('smile');
+    await typeText('相沢 悠', 'もうちょっとだけ、時間くれないか。'); await waitClick();
+    await typeText('', '── 答えはまだ、もう少し先。'); await waitClick();
+    await typeText('', 'でも、進んでいないわけじゃない。'); await waitClick();
+    await typeText('', 'クッキーを噛じると、バターの優しい味がした。'); await waitClick();
+
+    await fadeOut();
+    showEnding('bittersweet', 'もう少しだけ',
+      'まだ答えは出ていない。<br>でも、拒絶でもない。<br><br>少しずつ、ゆっくりと。<br>この距離を詰めていけたら。<br><br>次の季節が来る頃には、きっと──',
+      '#8899BB');
+  }
+}
+
+// タイトルクリック
+titleScreen.addEventListener('click', () => {
+  if (state.phase === 'title') {
+    state.phase = 'game';
+    startGame();
+  }
+});
+</script>
+</body>
+</html>
